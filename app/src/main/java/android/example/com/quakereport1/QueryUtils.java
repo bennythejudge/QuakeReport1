@@ -80,14 +80,12 @@ public final class QueryUtils {
                 Log.v("EarthQuake", String.valueOf(p));
                 String mag = p.getString("mag");
                 String location = p.getString("place");
-                String time = p.getString("time");
+                Long time = p.getLong("time");
                 Log.v("EQ", "mag: " + mag + " place: " + location + " time: " + time);
                 // convert time to long and convert then to Date format
-                Date date = new Date(Long.parseLong(time));
-                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-                format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
-                String formatted = format.format(date);
-                earthquakes.add(new EarthQuake(mag, location, formatted));
+                // no longer need to convert as I can extract from json as long
+                // Date date = new Date(Long.parseLong(time));
+                earthquakes.add(new EarthQuake(mag, location, time));
             }
         } catch (JSONException e) {
             // If an error is thrown when executing any of the above statements in the "try" block,

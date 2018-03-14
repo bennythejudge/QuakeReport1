@@ -18,39 +18,39 @@ public class QuakeReport1 extends AppCompatActivity {
 
         // create the list of earthquake
         ArrayList<EarthQuake> earthQuakes = new ArrayList<>();
-
-        earthQuakes.add(new EarthQuake(
-                "8.9",
-                "San Francisco",
-                "2012-01-01"));
-        earthQuakes.add(new EarthQuake(
-                "9.1",
-                "NYC",
-                "2013-01-01"));
-        earthQuakes.add(new EarthQuake(
-                "1.9",
-                "Bertrange",
-                "2014-01-01"));
-        earthQuakes.add(new EarthQuake(
-                "2.9",
-                "Luxembourg",
-                "2015-01-01"));
-        earthQuakes.add(new EarthQuake(
-                "3.9",
-                "Los Angelese",
-                "2016-01-01"));
-        earthQuakes.add(new EarthQuake(
-                "4.9",
-                "Perugia",
-                "2017-01-01"));
-        earthQuakes.add(new EarthQuake(
-                "5.9",
-                "Rome",
-                "2018-01-01"));
-        earthQuakes.add(new EarthQuake(
-                "6.9",
-                "Frankfurt",
-                "2019-01-01"));
+//
+//        earthQuakes.add(new EarthQuake(
+//                "8.9",
+//                "San Francisco",
+//                1521063679021L));
+//        earthQuakes.add(new EarthQuake(
+//                "9.1",
+//                "NYC",
+//                1521063679021L));
+//        earthQuakes.add(new EarthQuake(
+//                "1.9",
+//                "Bertrange",
+//                1521063679021L));
+//        earthQuakes.add(new EarthQuake(
+//                "2.9",
+//                "Luxembourg",
+//                1521063679021L));
+//        earthQuakes.add(new EarthQuake(
+//                "3.9",
+//                "Los Angelese",
+//                1521063679021L));
+//        earthQuakes.add(new EarthQuake(
+//                "4.9",
+//                "Perugia",
+//                1521063679021L));
+//        earthQuakes.add(new EarthQuake(
+//                "5.9",
+//                "Rome",
+//                1521063679021L));
+//        earthQuakes.add(new EarthQuake(
+//                "6.9",
+//                "Frankfurt",
+//                1521063679021L));
 
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
 
