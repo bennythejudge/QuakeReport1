@@ -11,6 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:paddingRight="5dp"
         tools:text="9.0"/>
 
     <TextView
@@ -18,6 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:paddingRight="5dp"
         tools:text="San Francisco, CA"/>
 
     <TextView
@@ -25,6 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:paddingRight="5dp"
         tools:text="2017-01-01"/>
 
 </LinearLayout>
