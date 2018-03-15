@@ -3,6 +3,7 @@ package android.example.com.quakereport1;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +25,25 @@ public class EarthQuakeAdapter extends ArrayAdapter<EarthQuake> {
         super(context, 0, earthQuakes);
     }
 
+    private String[] splitLocation(String location) {
+        String[] aloc = new String[2];
+        if (location.contains(",")) {
+            aloc = location.split("[,]");
+        } else {
+            aloc[0] = "Near";
+            aloc[1] = location;
+        }
+        Log.v("splitLocation", "returning [" + aloc[0] + "][" + aloc[1] + "]");
+        return aloc;
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItemView = convertView;
+        String location;
+        String[] aloc;
+
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.earthquake_list_item, parent, false);
@@ -38,8 +54,16 @@ public class EarthQuakeAdapter extends ArrayAdapter<EarthQuake> {
         TextView magnitudeView = (TextView) listItemView.findViewById(R.id.magnitude);
         magnitudeView.setText(currentEarthquake.getMagnitude());
 
-        TextView locationView = (TextView) listItemView.findViewById(R.id.location);
-        locationView.setText(currentEarthquake.getLocation());
+        location = currentEarthquake.getLocation();
+        aloc = splitLocation(location);
+
+
+        TextView loc1 = (TextView) listItemView.findViewById(R.id.location1);
+
+        TextView loc2 = (TextView) listItemView.findViewById(R.id.location2);
+
+        loc1.setText(aloc[0]);
+        loc2.setText(aloc[1]);
 
         TextView dateView = (TextView) listItemView.findViewById(R.id.date);
         TextView timeView = (TextView) listItemView.findViewById(R.id.time);
