@@ -18,41 +18,10 @@ public class QuakeReport1 extends AppCompatActivity {
 
         // create the list of earthquake
         ArrayList<EarthQuake> earthQuakes = new ArrayList<>();
-//
-//        earthQuakes.add(new EarthQuake(
-//                "8.9",
-//                "San Francisco",
-//                1521063679021L));
-//        earthQuakes.add(new EarthQuake(
-//                "9.1",
-//                "NYC",
-//                1521063679021L));
-//        earthQuakes.add(new EarthQuake(
-//                "1.9",
-//                "Bertrange",
-//                1521063679021L));
-//        earthQuakes.add(new EarthQuake(
-//                "2.9",
-//                "Luxembourg",
-//                1521063679021L));
-//        earthQuakes.add(new EarthQuake(
-//                "3.9",
-//                "Los Angelese",
-//                1521063679021L));
-//        earthQuakes.add(new EarthQuake(
-//                "4.9",
-//                "Perugia",
-//                1521063679021L));
-//        earthQuakes.add(new EarthQuake(
-//                "5.9",
-//                "Rome",
-//                1521063679021L));
-//        earthQuakes.add(new EarthQuake(
-//                "6.9",
-//                "Frankfurt",
-//                1521063679021L));
-
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
+
+        // make the items in the list clickable
+        
 
         earthQuakes = QueryUtils.extractEarthquakes();
         Log.v("MAIN", String.valueOf(earthQuakes));

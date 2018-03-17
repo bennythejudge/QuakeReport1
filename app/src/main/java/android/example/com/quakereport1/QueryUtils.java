@@ -85,7 +85,10 @@ public final class QueryUtils {
                 // convert time to long and convert then to Date format
                 // no longer need to convert as I can extract from json as long
                 // Date date = new Date(Long.parseLong(time));
-                earthquakes.add(new EarthQuake(mag, location, time));
+                // extract the URL
+                String url = p.getString("url");
+                Log.d("QueryUtils", "url: " + url);
+                earthquakes.add(new EarthQuake(mag, location, time, url));
             }
         } catch (JSONException e) {
             // If an error is thrown when executing any of the above statements in the "try" block,
