@@ -78,7 +78,7 @@ public final class QueryUtils {
                 JSONObject c = features.getJSONObject(i);
                 JSONObject p = c.getJSONObject("properties");
                 Log.v("EarthQuake", String.valueOf(p));
-                String mag = p.getString("mag");
+                double mag = p.getDouble("mag");
                 String location = p.getString("place");
                 Long time = p.getLong("time");
                 Log.v("EQ", "mag: " + mag + " place: " + location + " time: " + time);

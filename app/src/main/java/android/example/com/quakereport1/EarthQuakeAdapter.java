@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +38,26 @@ public class EarthQuakeAdapter extends ArrayAdapter<EarthQuake> {
         return aloc;
     }
 
+    private int getMagnitudeColor(double mag) {
+        int magnitudeFloor = (int) Math.floor(mag);
+        switch (magnitudeFloor) {
+            case 0:
+            case 1:
+                color = R.color.magnitude1;
+            case 2:
+                color = R.color.magnitude2;
+            case 3:
+                color = R.color.magnitude1;
+            case 4:
+                color = R.color.magnitude1;
+            case 5:
+                color = R.color.magnitude1;
+            case 6:
+                color = R.color.magnitude1;
+        }
+    }
+
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -51,8 +72,18 @@ public class EarthQuakeAdapter extends ArrayAdapter<EarthQuake> {
 
         EarthQuake currentEarthquake = getItem(position);
 
+        // format the magnitude
+        DecimalFormat formatter = new DecimalFormat("0.0");
+        double mag = currentEarthquake.getMagnitude();
+        String sMag = formatter.format(mag);
+
         TextView magnitudeView = (TextView) listItemView.findViewById(R.id.magnitude);
-        magnitudeView.setText(currentEarthquake.getMagnitude());
+        magnitudeView.setText(sMag);
+        // set the color of the magnitude
+        int color = getMagnitudeColor(mag);
+
+
+
 
         location = currentEarthquake.getLocation();
         aloc = splitLocation(location);
