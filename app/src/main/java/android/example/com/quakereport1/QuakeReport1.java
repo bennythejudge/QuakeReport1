@@ -20,56 +20,21 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class QuakeReport1 extends AppCompatActivity {
 
-    // get data from the USGS website
-    private ArrayList<EarthQuake> fetchHttpData () throws MalformedURLException {
-        ArrayList<EarthQuake> earthQuakes = new ArrayList<EarthQuake>();
-
-        Log.d("QuakeReport1", "insde fetchHttpData");
-
-        HttpsURLConnection myConnection;
-
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                // All your networking logic
-                // should be here
-
-
-            }
-        });
-        // Create URL
-        URL usgsUrl = new URL("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2018-03-17&endtime=2018-03-17&minmag=4&limit=100");
-
-        // Create connection
-        try {
-            myConnection =
-                    (HttpsURLConnection) usgsUrl.openConnection();
-            if (myConnection.getResponseCode() == 200) {
-                // Success
-                // Further processing here
-                Log.d("QuakeReport1", "got a 200!");
-
-            } else {
-                // Error handling code goes here
-                Log.d("QuakeReport1", "I did NOT get a 200! " + myConnection.getResponseCode());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return earthQuakes;
-    };
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quake_report1);
 
+        URL usgsUrl = null;
+
+        // let's try to get the data from the usgs website
         try {
-            fetchHttpData();
+            usgsUrl = new URL("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2018-03-17&endtime=2018-03-17&minmag=4&limit=100");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        new RetrieveDataTask().execute(usgsUrl);
+
 
         // this is where we used to get the earthquakes from the hardcoded array
         final ArrayList<EarthQuake> earthQuakes = QueryUtils.extractEarthquakes();
