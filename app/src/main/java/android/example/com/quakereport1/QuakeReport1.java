@@ -25,16 +25,10 @@ public class QuakeReport1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quake_report1);
 
-        URL usgsUrl = null;
+        // start the http client thread
+        new RetrieveDataTask().execute();
 
-        // let's try to get the data from the usgs website
-        try {
-            usgsUrl = new URL("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2018-03-17&endtime=2018-03-17&minmag=4&limit=100");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        new RetrieveDataTask().execute(usgsUrl);
-
+        Log.v("myOwnWork", "after call to RetrieveDataTask");
 
         // this is where we used to get the earthquakes from the hardcoded array
         final ArrayList<EarthQuake> earthQuakes = QueryUtils.extractEarthquakes();

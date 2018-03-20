@@ -36,7 +36,7 @@ public class EarthQuakeAdapter extends ArrayAdapter<EarthQuake> {
             aloc[0] = "Near";
             aloc[1] = location;
         }
-        Log.v("splitLocation", "returning [" + aloc[0] + "][" + aloc[1] + "]");
+//        Log.v("splitLocation", "returning [" + aloc[0] + "][" + aloc[1] + "]");
         return aloc;
     }
 
