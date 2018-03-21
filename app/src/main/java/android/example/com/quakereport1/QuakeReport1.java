@@ -193,7 +193,7 @@ public class QuakeReport1 extends AppCompatActivity {
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
             super.onPostExecute(jsonArray);
-            Toast.makeText(QuakeReport1.this, "finito http call", Toast.LENGTH_LONG)
+            Toast.makeText(QuakeReport1.this, "finito http call" + jsonArray, Toast.LENGTH_LONG)
             .show();
         }
     }
