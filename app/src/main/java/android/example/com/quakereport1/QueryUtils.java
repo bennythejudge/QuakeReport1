@@ -16,7 +16,7 @@ import java.util.TimeZone;
 /**
  * Helper methods related to requesting and receiving earthquake data from USGS.
  */
-public final class QueryUtils {
+public class QueryUtils {
 
     /**
      * Sample JSON response for a USGS query
@@ -49,7 +49,7 @@ public final class QueryUtils {
      * Return a list of {@link EarthQuake} objects that has been built up from
      * parsing a JSON response.
      */
-    public static ArrayList<EarthQuake> extractEarthquakes() {
+    public static ArrayList<EarthQuake> extractEarthquakes(String response) {
 
         // Create an empty ArrayList that we can start adding earthquakes to
         ArrayList<EarthQuake> earthquakes = new ArrayList<>();
@@ -72,7 +72,7 @@ public final class QueryUtils {
             Create Earthquake java object from magnitude, location, and time
             Add earthquake to list of earthquakes
             */
-            JSONObject jsonObj = new JSONObject(SAMPLE_JSON_RESPONSE);
+            JSONObject jsonObj = new JSONObject(response);
             JSONArray features = jsonObj.getJSONArray("features");
             for (int i=0; i<features.length(); i++) {
                 JSONObject c = features.getJSONObject(i);

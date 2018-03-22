@@ -1,5 +1,6 @@
 package android.example.com.quakereport1;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -29,6 +30,11 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class QuakeReport1 extends AppCompatActivity {
 
+    ListView earthquakeListView;
+    EarthQuakeAdapter adapter;
+    ArrayList<EarthQuake> earthQuakes;
+    Context quakeReport1Context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,40 +46,12 @@ public class QuakeReport1 extends AppCompatActivity {
 
         Log.v("myOwnWork", "after call to RetrieveDataTask");
 
-        // this is where we used to get the earthquakes from the hardcoded array
-        final ArrayList<EarthQuake> earthQuakes = QueryUtils.extractEarthquakes();
-
-        Log.v("MAIN", String.valueOf(earthQuakes));
-
         Log.v("MAIN", "QUAKE REPORT1");
 
-        // create the list of earthquake
-        ListView earthquakeListView = (ListView) findViewById(R.id.list);
-
-        // make the items in the list clickable
-        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // when clicked send create intent to open url
-                String url = earthQuakes.get(i).getUrl();
-                Toast.makeText(getApplicationContext(),
-                        "intent at " + url,
-                        Toast.LENGTH_SHORT).show();
-                Intent openUrlIntent = new Intent(Intent.ACTION_VIEW);
-                openUrlIntent.setData(Uri.parse(url));
-                startActivity(openUrlIntent);
-            }
-        });
-
-
-        EarthQuakeAdapter adapter =
-                new EarthQuakeAdapter(this, earthQuakes);
-
-        earthquakeListView.setAdapter(adapter);
     }
 
 
-    public class RetrieveDataTask extends AsyncTask<Void, String, JSONArray> {
+    public class RetrieveDataTask extends AsyncTask<Void, String, String> {
 
         /**
          * Tag for the log messages
@@ -172,7 +150,7 @@ public class QuakeReport1 extends AppCompatActivity {
         }
 
         @Override
-        protected JSONArray doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             Log.d("RetrieveDataTask", "inside doInBackground");
 
             URL url = createUrl(USGS_REQUEST_URL);
@@ -183,18 +161,51 @@ public class QuakeReport1 extends AppCompatActivity {
                 // TODO Handle the IOException
             }
 
-            // Extract relevant fields from the JSON response and create an {@link Event} object
-            JSONArray JSONearthquakes = extractFeatureFromJson(jsonResponse);
+            // return the jsonResponse as it is here as a String
 
-            Log.d("RetrieveDataTask", "earthquake: " + JSONearthquakes);
-            return JSONearthquakes;
+            // Extract relevant fields from the JSON response and create an {@link Event} object
+            // JSONArray JSONearthquakes = extractFeatureFromJson(jsonResponse);
+
+            Log.d("RetrieveDataTask", "earthquake: " + jsonResponse);
+
+            return jsonResponse;
         }
 
         @Override
-        protected void onPostExecute(JSONArray jsonArray) {
-            super.onPostExecute(jsonArray);
-            Toast.makeText(QuakeReport1.this, "finito http call" + jsonArray, Toast.LENGTH_LONG)
+        protected void onPostExecute(String jsonResponse) {
+            super.onPostExecute(jsonResponse);
+            Log.d("onPostExecute", "content: " + jsonResponse);
+            Toast.makeText(QuakeReport1.this, "finito http call" + jsonResponse, Toast.LENGTH_LONG)
             .show();
+
+            // create the list of earthquake
+            earthquakeListView = (ListView) findViewById(R.id.list);
+
+            // this is where we used to get the earthquakes from the hardcoded array
+            earthQuakes = QueryUtils.extractEarthquakes(jsonResponse);
+
+            Log.v("onPostExecute", String.valueOf(earthQuakes));
+
+            // make the items in the list clickable
+            earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    // when clicked send create intent to open url
+                    String url = earthQuakes.get(i).getUrl();
+                    Toast.makeText(getApplicationContext(),
+                            "intent at " + url,
+                            Toast.LENGTH_SHORT).show();
+                    Intent openUrlIntent = new Intent(Intent.ACTION_VIEW);
+                    openUrlIntent.setData(Uri.parse(url));
+                    startActivity(openUrlIntent);
+                }
+            });
+
+
+            adapter =
+                    new EarthQuakeAdapter(quakeReport1Context, earthQuakes);
+
+            earthquakeListView.setAdapter(adapter);
         }
     }
 }
