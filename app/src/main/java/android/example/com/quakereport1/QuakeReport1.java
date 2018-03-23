@@ -24,7 +24,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -49,6 +52,7 @@ public class QuakeReport1 extends AppCompatActivity {
         Log.v("MAIN", "QUAKE REPORT1");
 
     }
+
 
 
     public class RetrieveDataTask extends AsyncTask<Void, String, String> {
@@ -149,11 +153,29 @@ public class QuakeReport1 extends AppCompatActivity {
             return null;
         }
 
+        private String[] getStartEndTime() {
+            String[] ret = new String[2];
+            // what day is today?
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            String today = df.format(new Date());
+            Log.d("getStartEndTime", "Today is: " + today);
+
+            ret[0] = "2018-01-31";
+            ret[1] = today;
+            return ret;
+        }
+
         @Override
         protected String doInBackground(Void... params) {
             Log.d("RetrieveDataTask", "inside doInBackground");
 
-            URL url = createUrl(USGS_REQUEST_URL);
+            String[] times = getStartEndTime();
+            Log.d("doInBackground", "today: " + times[1]);
+            String sUrl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=" +
+                    times[0] + "&endtime=" + times[1] + "&minmag=4&limit=100";
+
+
+            URL url = createUrl(sUrl);
             String jsonResponse = "";
             try {
                 jsonResponse = makeHttpRequest(url);
@@ -175,7 +197,7 @@ public class QuakeReport1 extends AppCompatActivity {
         protected void onPostExecute(String jsonResponse) {
             super.onPostExecute(jsonResponse);
             Log.d("onPostExecute", "content: " + jsonResponse);
-            Toast.makeText(QuakeReport1.this, "finito http call" + jsonResponse, Toast.LENGTH_LONG)
+            Toast.makeText(QuakeReport1.this, "Data Received", Toast.LENGTH_LONG)
             .show();
 
             // create the list of earthquake
