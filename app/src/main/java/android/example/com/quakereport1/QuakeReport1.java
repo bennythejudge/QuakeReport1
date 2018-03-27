@@ -54,15 +54,17 @@ public class QuakeReport1 extends AppCompatActivity {
     }
 
 
-
-    public class RetrieveDataTask extends AsyncTask<Void, String, String> {
+    // Void because I am not passing anything to this class
+    // Void because I am not updating the progress
+    // String because I am returning a String version of the JSON
+    public class RetrieveDataTask extends AsyncTask<Void, Void, String> {
 
         /**
          * Tag for the log messages
          */
         public final String LOG_TAG = RetrieveDataTask.class.getSimpleName();
 
-        private String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2017-03-17&endtime=2018-03-17&minmag=4&limit=100";
+//        private String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2017-03-17&endtime=2018-03-17&minmag=6&limit=100";
 
         // read the responsebody containing the JSON payload
         // java is f* ugly! viva python
@@ -172,9 +174,7 @@ public class QuakeReport1 extends AppCompatActivity {
             String[] times = getStartEndTime();
             Log.d("doInBackground", "today: " + times[1]);
             String sUrl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=" +
-                    times[0] + "&endtime=" + times[1] + "&minmag=4&limit=100";
-
-
+                    times[0] + "&endtime=" + times[1] + "&minmag=6&limit=100";
             URL url = createUrl(sUrl);
             String jsonResponse = "";
             try {
@@ -197,8 +197,6 @@ public class QuakeReport1 extends AppCompatActivity {
         protected void onPostExecute(String jsonResponse) {
             super.onPostExecute(jsonResponse);
             Log.d("onPostExecute", "content: " + jsonResponse);
-            Toast.makeText(QuakeReport1.this, "Data Received", Toast.LENGTH_LONG)
-            .show();
 
             // create the list of earthquake
             earthquakeListView = (ListView) findViewById(R.id.list);
@@ -207,6 +205,16 @@ public class QuakeReport1 extends AppCompatActivity {
             earthQuakes = QueryUtils.extractEarthquakes(jsonResponse);
 
             Log.v("onPostExecute", String.valueOf(earthQuakes));
+
+            if (earthQuakes == null || earthQuakes.isEmpty()) {
+                Toast.makeText(QuakeReport1.this, "No Data Found", Toast.LENGTH_LONG)
+                        .show();
+                return;
+            }
+
+            Toast.makeText(QuakeReport1.this, "Data Received", Toast.LENGTH_LONG)
+                    .show();
+
 
             // make the items in the list clickable
             earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
