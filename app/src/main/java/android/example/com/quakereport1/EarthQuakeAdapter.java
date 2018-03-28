@@ -24,6 +24,7 @@ import java.util.TimeZone;
  */
 
 public class EarthQuakeAdapter extends ArrayAdapter<EarthQuake> {
+
     public EarthQuakeAdapter(@NonNull Context context, List<EarthQuake> earthQuakes) {
         super(context, 0, earthQuakes);
     }
