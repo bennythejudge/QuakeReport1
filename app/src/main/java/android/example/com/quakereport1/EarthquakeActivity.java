@@ -18,6 +18,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,14 +43,18 @@ public class EarthquakeActivity extends AppCompatActivity
 
     private static final int EARTHQUAKE_LOADER_ID = 1;
     private EarthQuakeAdapter mAdapter;
-
+    private ListView earthQuakeListView;
+    private TextView mEmptyStateTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quake_report1);
 
-        ListView earthQuakeListView = (ListView) findViewById(R.id.list);
+        earthQuakeListView = (ListView) findViewById(R.id.list);
+
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+        earthQuakeListView.setEmptyView(mEmptyStateTextView);
 
         mAdapter = new EarthQuakeAdapter(this, new ArrayList<EarthQuake>());
 
@@ -84,10 +89,6 @@ public class EarthquakeActivity extends AppCompatActivity
         loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
     }
 
-
-
-
-
     // =========================================================================================
     // THIS IS THE NEW WORLD OF LOADERS!!!
     // loader: we need to override the Loader methods
@@ -110,6 +111,8 @@ public class EarthquakeActivity extends AppCompatActivity
         Log.d("onLoadFinished", "now update the UI with: " + earthQuakeList);
         if (earthQuakeList != null && ! earthQuakeList.isEmpty()) {
             mAdapter.addAll(earthQuakeList);
+        } else {
+            mEmptyStateTextView.setText(R.string.no_earthquakes);
         }
     }
 

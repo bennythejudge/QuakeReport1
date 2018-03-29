@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">QuakeReport1</string>
+    <string name="no_earthquakes">There are no earthquakes (or, more likely, this app is crap!)</string>
 </resources>
+
