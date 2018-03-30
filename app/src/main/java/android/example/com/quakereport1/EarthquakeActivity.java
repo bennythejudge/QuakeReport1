@@ -4,6 +4,7 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ public class EarthquakeActivity extends AppCompatActivity
     private EarthQuakeAdapter mAdapter;
     private ListView earthQuakeListView;
     private TextView mEmptyStateTextView;
+    private ProgressBar mProgBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,9 @@ public class EarthquakeActivity extends AppCompatActivity
         earthQuakeListView = (ListView) findViewById(R.id.list);
 
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+
+        mProgBar = (ProgressBar) findViewById(R.id.prog_bar);
+
         earthQuakeListView.setEmptyView(mEmptyStateTextView);
 
         mAdapter = new EarthQuakeAdapter(this, new ArrayList<EarthQuake>());
@@ -76,8 +82,22 @@ public class EarthquakeActivity extends AppCompatActivity
             }
         });
 
+        Context context = this.getApplicationContext();
+        // check if there is internet connection
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+
+
+
 
         Log.v("MAIN", "about to get the LoaderManager");
+
+
 
 
         // Get a reference to the LoaderManager, in order to interact with loaders.
@@ -106,6 +126,9 @@ public class EarthquakeActivity extends AppCompatActivity
 
     @Override
     public void onLoadFinished(Loader<List<EarthQuake>> loader, List<EarthQuake> earthQuakeList) {
+        // hide the progress bar
+        mProgBar.setVisibility(View.INVISIBLE);
+
         // here update the UI this is called when the loader has finished loading
         mAdapter.clear();
         Log.d("onLoadFinished", "now update the UI with: " + earthQuakeList);
