@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -91,22 +92,20 @@ public class EarthquakeActivity extends AppCompatActivity
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
 
+        if (isConnected) {
+            Log.v("MAIN", "about to get the LoaderManager");
+            // Get a reference to the LoaderManager, in order to interact with loaders.
+            LoaderManager loaderManager = getLoaderManager();
 
-
-
-
-        Log.v("MAIN", "about to get the LoaderManager");
-
-
-
-
-        // Get a reference to the LoaderManager, in order to interact with loaders.
-        LoaderManager loaderManager = getLoaderManager();
-
-        // Initialize the loader. Pass in the int ID constant defined above and pass in null for
-        // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
-        // because this activity implements the LoaderCallbacks interface).
-        loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
+            // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+            // because this activity implements the LoaderCallbacks interface).
+            loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
+        } else {
+            Log.d("onCreate", "No network connectivity");
+            mProgBar.setVisibility(View.INVISIBLE);
+            mEmptyStateTextView.setText(R.string.no_earthquakes);
+        }
     }
 
     // =========================================================================================
@@ -135,6 +134,7 @@ public class EarthquakeActivity extends AppCompatActivity
         if (earthQuakeList != null && ! earthQuakeList.isEmpty()) {
             mAdapter.addAll(earthQuakeList);
         } else {
+            mProgBar.setVisibility(View.INVISIBLE);
             mEmptyStateTextView.setText(R.string.no_earthquakes);
         }
     }
@@ -143,6 +143,7 @@ public class EarthquakeActivity extends AppCompatActivity
     public void onLoaderReset(Loader<List<EarthQuake>> loader) {
         // this is called when the the mainactivity or the loader is closing and we can clear
         // the existing data to free up memory
+        mProgBar.setVisibility(View.INVISIBLE);
         Log.d("onLoaderReset", "Doing a reset <<<<<<<<<<<<<<<<<<<<<<<<========");
         mAdapter.clear();
     }
