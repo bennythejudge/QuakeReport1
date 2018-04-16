@@ -56,15 +56,10 @@ public class EarthquakeActivity extends AppCompatActivity
         setContentView(R.layout.activity_quake_report1);
 
         earthQuakeListView = (ListView) findViewById(R.id.list);
-
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
-
         mProgBar = (ProgressBar) findViewById(R.id.prog_bar);
-
         earthQuakeListView.setEmptyView(mEmptyStateTextView);
-
         mAdapter = new EarthQuakeAdapter(this, new ArrayList<EarthQuake>());
-
         earthQuakeListView.setAdapter(mAdapter);
 
         earthQuakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -115,9 +110,10 @@ public class EarthquakeActivity extends AppCompatActivity
     public Loader<List<EarthQuake>> onCreateLoader(int i, Bundle bundle) {
         // create a new loader for the given URL
         String[] times = getStartEndTime();
-        Log.d("onCreateLoader", "today: " + times[1]);
+        Log.d("onCreateLoader", "today: " + times[1] + " times[0]: " + times[0]);
         String sUrl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=" +
                 times[0] + "&endtime=" + times[1] + "&minmag=6&limit=100";
+        Log.d("onCreateLoader", "sUrl: " + sUrl);
 
         // call the API
         return new EarthquakeLoader(this, sUrl);
