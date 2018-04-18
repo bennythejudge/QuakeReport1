@@ -4,10 +4,12 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,6 +53,8 @@ public class EarthquakeActivity extends AppCompatActivity
     private ListView earthQuakeListView;
     private TextView mEmptyStateTextView;
     private ProgressBar mProgBar;
+    private static final String
+            USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,15 +132,29 @@ public class EarthquakeActivity extends AppCompatActivity
     // loader: we need to override the Loader methods
     @Override
     public Loader<List<EarthQuake>> onCreateLoader(int i, Bundle bundle) {
-        // create a new loader for the given URL
+
+        // retrieve the newly added preference
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String minMagnitude = sharedPrefs.getString(
+                getString(R.string.settings_min_magnitude_key),
+                getString(R.string.settings_min_magnitude_default)
+        );
+        // now prepare the Url
+        Uri baseUri = Uri.parse(USGS_REQUEST_URL);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
         String[] times = getStartEndTime();
         Log.d("onCreateLoader", "today: " + times[1] + " times[0]: " + times[0]);
-        String sUrl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=" +
-                times[0] + "&endtime=" + times[1] + "&minmag=6&limit=100";
-        Log.d("onCreateLoader", "sUrl: " + sUrl);
+
+        uriBuilder.appendQueryParameter("format", "geojson");
+        uriBuilder.appendQueryParameter("limit", "100");
+        uriBuilder.appendQueryParameter("starttime", times[0]);
+        uriBuilder.appendQueryParameter("endtime", times[1]);
+        uriBuilder.appendQueryParameter("minmag", minMagnitude);
+        uriBuilder.appendQueryParameter("orderby", "time");
 
         // call the API
-        return new EarthquakeLoader(this, sUrl);
+        return new EarthquakeLoader(this, uriBuilder.toString());
     }
 
     @Override
