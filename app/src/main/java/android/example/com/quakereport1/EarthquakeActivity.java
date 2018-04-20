@@ -142,8 +142,8 @@ public class EarthquakeActivity extends AppCompatActivity
 
         // retrieve the preference for order by
         String orderBy = sharedPrefs.getString(
-            getString(R.string.settings_order_by_key),
-            getString(R.string.settings_order_by_default)
+                getString(R.string.settings_order_by_key),
+                getString(R.string.settings_order_by_default)
         );
 
 
