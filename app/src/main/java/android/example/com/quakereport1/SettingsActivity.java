@@ -21,18 +21,20 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("THECHALET", "inside SettingsActivity");
         setContentView(R.layout.settings_activity);
     }
-
-
 
     public static class EarthquakePreferenceFragment
             extends PreferenceFragment
             implements Preference.OnPreferenceChangeListener {
+
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings_main);
+
+            Log.d("THECHALET", "inside onCreate inside EarthquakePreferenceFragment");
 
             Preference minMag = findPreference(getString(R.string.settings_min_magnitude_key));
             bindPreferenceSummaryToValue(minMag);
@@ -43,70 +45,47 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         private void bindPreferenceSummaryToValue(Preference preference) {
+
+            Log.d("THECHALET", "inside bindPreferenceSummaryToValue");
+
             preference.setOnPreferenceChangeListener(this);
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
             String preferenceString = preferences.getString(preference.getKey(), "");
             onPreferenceChange(preference, preferenceString);
         }
 
-
-
-
-//        private void bindPreferenceSummaryToValue(Preference preference) {
-//            preference.setOnPreferenceChangeListener(this);
-//            SharedPreferences prefs =
-//                    PreferenceManager.
-//                            getDefaultSharedPreferences(preference.getContext());
-//            String preferenceString = prefs.getString(preference.getKey(), "");
-//            onPreferenceChange(preference, preferenceString);
-//        }
-
-//        @Override
-//        public boolean onPreferenceChange(Preference preference, Object o) {
-//            // get the value changed as a string
-//            String sValue = o.toString();
-//            if (preference instanceof ListPreference) {
-//                ListPreference listPref = (ListPreference) preference;
-//                int prefIndex = listPref.findIndexOfValue(sValue);
-//                Log.d("onPreferenceChange1",
-//                        "in 1st if with sValue: " + sValue + " prefIndex: " +
-//                                String.valueOf(prefIndex));
-//
-//                if (prefIndex >= 0) {
-//                    CharSequence[] labels = listPref.getEntries();
-//                    Log.d("onPreferenceChange3",
-//                            "in if with prefIndex: " +
-//                                    String.valueOf(prefIndex) +
-//                            " and labels: " + labels +
-//                    " labels.length: " + labels.length);
-//                    if (labels.length < 1) {
-//                        Log.d("onPreferenceChange3", "do nothing");
-//                    } else {
-//                        preference.setSummary(labels[prefIndex]);
-//                    }
-//                }
-//            } else {
-//                Log.d("onPreferenceChange2",
-//                        "going for else with sValue: " + sValue +
-//                                " preference: " + preference);
-//                preference.setSummary(sValue);
-//            }
-//            return true;
-//        }
-//    }
-
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
+
+            Log.d("THECHALET", "inside onPreferenceChange preference: " + preference);
+
             String stringValue = value.toString();
+
+            Log.d("THECHALET", "point 9 inside onPreferenceChange2 stringValue: " + stringValue);
+
+
             if (preference instanceof ListPreference) {
+                Log.d("THECHALET", "inside onPreferenceChange inside if");
+
                 ListPreference listPreference = (ListPreference) preference;
                 int prefIndex = listPreference.findIndexOfValue(stringValue);
+                Log.d("THECHALET", "point 10 prefIndex : " + prefIndex);
                 if (prefIndex >= 0) {
                     CharSequence[] labels = listPreference.getEntries();
+                    Log.d("THECHALET", "inside onPreferenceChange inside if about to setSummary");
+                    Log.d("THECHALET", "prefIndex: " + prefIndex);
+                    Log.d("THECHALET", "labels: " + labels);
+                    Log.d("THECHALET", "labels length: " + labels.length);
+
                     preference.setSummary(labels[prefIndex]);
                 }
             } else {
+                Log.d("THECHALET", "inside onPreferenceChange inside else");
+
                 preference.setSummary(stringValue);
+
+                Log.d("THECHALET", "inside onPreferenceChange after setSummray");
+
             }
             return true;
         }
