@@ -58,19 +58,33 @@ public class QueryUtils {
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
 
+
+        Log.d("makeHttpRequest", "url: " + url.toString());
+
+
         // If the URL is null, then return early.
         if (url == null) {
             return jsonResponse;
         }
 
+        Log.d("makeHttpRequest", "past the first if");
+
+
         HttpURLConnection urlConnection = null;
         InputStream inputStream = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(10000 /* milliseconds */);
-            urlConnection.setConnectTimeout(15000 /* milliseconds */);
+//            urlConnection.setReadTimeout(10000 /* milliseconds */);
+//            urlConnection.setConnectTimeout(15000 /* milliseconds */);
             urlConnection.setRequestMethod("GET");
+
+            Log.d("makeHttpRequest", "before the connect");
+
             urlConnection.connect();
+
+            Log.d("makeHttpRequest", "past the connect");
+
+
 
             // If the request was successful (response code 200),
             // then read the input stream and parse the response.
@@ -81,7 +95,7 @@ public class QueryUtils {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results." + e.getMessage());
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -115,14 +129,6 @@ public class QueryUtils {
         // Create URL object
         URL url = createUrl(requestUrl);
 
-        // sleep for 2 seconds
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
-
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
         try {
@@ -130,6 +136,8 @@ public class QueryUtils {
         } catch (IOException e) {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
+
+        Log.d("fetchEarthquakeData", "jsonResponse: " + jsonResponse.toString());
 
         // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
         List<EarthQuake> earthquakes = extractEarthquakes(jsonResponse);

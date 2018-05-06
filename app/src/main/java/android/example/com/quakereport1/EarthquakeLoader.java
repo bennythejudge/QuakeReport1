@@ -4,6 +4,7 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.example.com.quakereport1.EarthQuake;
 import android.example.com.quakereport1.QueryUtils;
+import android.util.Log;
 
 import java.util.List;
 
@@ -43,6 +44,8 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<EarthQuake>> {
         if (mUrl == null) {
             return null;
         }
+
+        Log.d("loadInBackground", "url: " + mUrl.toString());
 
         // Perform the network request, parse the response, and extract a list of earthquakes.
         List<EarthQuake> earthquakes = QueryUtils.fetchEarthquakeData(mUrl);
